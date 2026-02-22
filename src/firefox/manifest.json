@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Better MS XDR",
+  "version": "1.0.0",
+  "description": "Adds some visual tweaks to the Microsoft Defender XDR UI.",
+  "permissions": ["storage"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "better-ms-xdr@h0ffayyy",
+      "strict_min_version": "109.0"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["theme-bridge.js"],
+      "matches": ["https://security.microsoft.com/*"]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://security.microsoft.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "48": "icons/icon48.svg",
+    "96": "icons/icon96.svg"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icons/icon48.svg",
+      "96": "icons/icon96.svg"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

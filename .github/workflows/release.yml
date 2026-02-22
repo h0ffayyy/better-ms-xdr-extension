@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build extensions
+        run: |
+          chmod +x scripts/build.sh
+          scripts/build.sh
+
+      - name: Create zip archives
+        run: |
+          cd dist/firefox && zip -r ../better-ms-xdr-firefox-${GITHUB_REF_NAME}.zip .
+          cd dist/chrome  && zip -r ../better-ms-xdr-chrome-${GITHUB_REF_NAME}.zip .
+
+      - name: Upload Firefox artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: better-ms-xdr-firefox
+          path: dist/better-ms-xdr-firefox-${GITHUB_REF_NAME}.zip
+          if-no-files-found: error
+
+      - name: Upload Chrome artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: better-ms-xdr-chrome
+          path: dist/better-ms-xdr-chrome-${GITHUB_REF_NAME}.zip
+          if-no-files-found: error
+
+      - name: Attach to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/better-ms-xdr-firefox-${GITHUB_REF_NAME}.zip
+            dist/better-ms-xdr-chrome-${GITHUB_REF_NAME}.zip

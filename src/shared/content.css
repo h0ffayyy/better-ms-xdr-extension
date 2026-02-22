@@ -1,0 +1,241 @@
+/* Inline sort arrow indicator next to "Incident Id" text */
+.xdr-sort-indicator {
+  font-size: 10px;
+  color: #0078d4;
+  pointer-events: none;
+}
+
+/* Small banner indicating the extension is active */
+.xdr-sorter-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  margin-left: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #0078d4;
+  background: #e6f2fb;
+  border: 1px solid #b3d7f2;
+  border-radius: 12px;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.xdr-sorter-banner::before {
+  content: "\25CF"; /* filled circle */
+  font-size: 8px;
+  color: #28a745;
+}
+
+/* Disabled state */
+.xdr-sorter-banner.xdr-disabled {
+  color: #8a8886;
+  background: #f3f2f1;
+  border-color: #d2d0ce;
+}
+
+.xdr-sorter-banner.xdr-disabled::before {
+  color: #a19f9d;
+}
+
+/* Toggle switch */
+.xdr-toggle {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  margin-left: 2px;
+}
+
+.xdr-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.xdr-toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #a19f9d;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.xdr-toggle-slider::before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: 2px;
+  bottom: 2px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.xdr-toggle input:checked + .xdr-toggle-slider {
+  background: #0078d4;
+}
+
+.xdr-toggle input:checked + .xdr-toggle-slider::before {
+  transform: translateX(12px);
+}
+
+.xdr-banner-sep {
+  color: #b3d7f2;
+  margin: 0 2px;
+  font-size: 11px;
+}
+
+.xdr-sorter-banner.xdr-disabled > :not(.xdr-banner-text) {
+  display: none;
+}
+
+.xdr-banner-label {
+  font-size: 11px;
+}
+
+.xdr-banner-theme-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* When sorting is active, the surface becomes a flex column container
+   and pages use display:contents so all cells participate in a single
+   flex ordering — enabling cross-page sorting via CSS order. */
+.ms-List-surface.xdr-sort-active {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.ms-List-surface.xdr-sort-active > .ms-List-page {
+  display: contents !important;
+}
+
+/* Hide the incidents page header via a class on <html> so it
+   survives DOM re-renders (e.g. column customisation). */
+html.xdr-header-hidden [class*="messageBarContainer"] + * {
+  display: none !important;
+}
+
+/* Compact / density mode — reduces row height and padding.
+   Fluent UI's virtualiser sets an inline height on .ms-List-cell, so we
+   must override `height` (not just min-height) to make the rows shorter. */
+html.xdr-compact-mode .ms-List-cell[data-automationid="ListCell"] {
+  height: 32px !important;
+  min-height: 32px !important;
+}
+
+html.xdr-compact-mode .ms-List-cell[data-automationid="ListCell"] .ms-DetailsRow {
+  min-height: 32px !important;
+  height: 32px !important;
+}
+
+html.xdr-compact-mode .ms-List-cell[data-automationid="ListCell"] .ms-DetailsRow-fields {
+  min-height: 32px !important;
+  height: 32px !important;
+  align-items: center !important;
+}
+
+html.xdr-compact-mode .ms-List-cell[data-automationid="ListCell"] .ms-DetailsRow-cell {
+  min-height: 32px !important;
+  height: 32px !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+}
+
+/* Hide the default MS chevron on columns we've taken over with our own sort indicators */
+div[data-item-key="id"] i.ms-DetailsHeader-filterChevron,
+div[data-item-key="name"] i.ms-DetailsHeader-filterChevron,
+div[data-item-key="TopRisk"] i.ms-DetailsHeader-filterChevron,
+div[data-item-key="TopRisk"] i[data-icon-name="SortDown"],
+div[data-item-key="severity"] i.ms-DetailsHeader-filterChevron,
+div[data-item-key="status"] i.ms-DetailsHeader-filterChevron,
+div[data-item-key="firstEventTime"] i.ms-DetailsHeader-filterChevron,
+div[data-item-key="lastEventTime"] i.ms-DetailsHeader-filterChevron,
+div[data-item-key="lastUpdateTime"] i.ms-DetailsHeader-filterChevron {
+  display: none !important;
+}
+
+/* Dim resolved incident rows */
+.ms-List-cell.xdr-resolved {
+  opacity: 0.45 !important;
+  transition: opacity 0.15s ease;
+}
+
+.ms-List-cell.xdr-resolved:hover {
+  opacity: 0.85 !important;
+}
+
+/* ── Scroll-to-top button ───────────────────────────── */
+
+.xdr-scroll-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #b3d7f2;
+  background: #e6f2fb;
+  color: #0078d4;
+  cursor: pointer;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.xdr-scroll-top.xdr-scroll-top-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.xdr-scroll-top:hover {
+  background: #cce4f7;
+}
+
+.xdr-scroll-top:active {
+  background: #b3d7f2;
+}
+
+/* Upward chevron via CSS border trick */
+.xdr-scroll-top::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid currentColor;
+  border-top: 2px solid currentColor;
+  transform: rotate(45deg) translateY(2px);
+}
+
+/* Dark mode overrides */
+html[data-xdr-theme="dark"] .xdr-scroll-top {
+  background: #2b2b2b;
+  border-color: #444;
+  color: #4fc3f7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+html[data-xdr-theme="dark"] .xdr-scroll-top:hover {
+  background: #383838;
+}
+
+html[data-xdr-theme="dark"] .xdr-scroll-top:active {
+  background: #444;
+}
