@@ -29,14 +29,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: better-ms-xdr-firefox
-          path: dist/better-ms-xdr-firefox-${GITHUB_REF_NAME}.zip
+          path: dist/better-ms-xdr-firefox-${{ github.ref_name }}.zip
           if-no-files-found: error
 
       - name: Upload Chrome artifact
         uses: actions/upload-artifact@v4
         with:
           name: better-ms-xdr-chrome
-          path: dist/better-ms-xdr-chrome-${GITHUB_REF_NAME}.zip
+          path: dist/better-ms-xdr-chrome-${{ github.ref_name }}.zip
           if-no-files-found: error
 
       - name: Attach to GitHub Release
@@ -44,5 +44,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/better-ms-xdr-firefox-${GITHUB_REF_NAME}.zip
-            dist/better-ms-xdr-chrome-${GITHUB_REF_NAME}.zip
+            dist/better-ms-xdr-firefox-${{ github.ref_name }}.zip
+            dist/better-ms-xdr-chrome-${{ github.ref_name }}.zip
