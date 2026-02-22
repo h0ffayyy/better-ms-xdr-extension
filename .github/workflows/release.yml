@@ -22,8 +22,8 @@ jobs:
 
       - name: Create zip archives
         run: |
-          cd dist/firefox && zip -r ../better-ms-xdr-firefox-${GITHUB_REF_NAME}.zip .
-          cd dist/chrome  && zip -r ../better-ms-xdr-chrome-${GITHUB_REF_NAME}.zip .
+          (cd dist/firefox && zip -r ../better-ms-xdr-firefox-${GITHUB_REF_NAME}.zip .)
+          (cd dist/chrome  && zip -r ../better-ms-xdr-chrome-${GITHUB_REF_NAME}.zip .)
 
       - name: Upload Firefox artifact
         uses: actions/upload-artifact@v4
